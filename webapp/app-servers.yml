@@ -1,12 +1,25 @@
 - name: "Build Resolve Site App Server"
-  hosts: "{{ target }}"
+  hosts: all
   become: true
   gather_facts: no
   tasks:
+       # EPEL installing
+    - name: Install Epel Release.
+      raw: yum -y install epel-release yum-utils
+      changed_when: False
+
+    # Install Remi
+    - name: Configure yum-config-manager enable php 7.4.
+      raw: wget https://rpms.remirepo.net/enterprise/remi-release-8.rpm  && rpm -ivh remi-release-8.rpm
+      changed_when: False
+    # yum-config-manager
+    - name: Configure module to php 7.4.
+      raw: dnf module install php:remi-7.4 -y
+      changed_when: False
 
     # EPEL installing
     - name: Install Epel Release.
-      raw: yum -y install epel-release yum-utils
+      yum: name=* state=latest
       changed_when: False
 
     - name: Ensure a list of packages installed
@@ -22,7 +35,6 @@
           - unzip
           - wget
           - zip
-          - nginx
           - php-cli
           - php-fpm
           - php-curl
@@ -33,7 +45,6 @@
           - php-gd
           - php-json
           - php-mbstring
-          - php-mcrypt
           - php-mysql
           - php-mysqli
           - php-pdo
@@ -44,20 +55,15 @@
           - php-zip
           - php-fpm
           - php-bz2
-          - php-igbinary
-          - php-memcached
-          - php-memcache
-          - php-mysqlnd
-          - php-mysqlnd
-          - php-propro
-          - php-soap
           - php-sqlite3
           - php-bcmath
+          - httpd
+          - deltarpm
+          - composer
+          - nodejs
         state: present
         update_cache: yes
 
-    # COMPOSER
-    # @ref https://github.com/Vinelab/ansible-composer/blob/master/tasks/main.yml
     - name: COMPOSER> download
       get_url:
         url: https://getcomposer.org/installer
@@ -88,34 +94,7 @@
         sed -i "s/memory_limit = 128M/memory_limit = 2048M/" /etc/php.ini && \
         sed -i "s/post_max_size = 8M/post_max_size = 1024M/" /etc/php.ini && \
         sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 1024M/" /etc/php.ini
-     
-    # NVM
-    - name: NVM install
-      shell: >
-        if [ -d "/opt/nvm" ]; then \
-          rm -rf /usr/bin/node /usr/bin/npm /opt/nvm ; \
-        fi && \
-        export NVM_DIR="/opt/nvm" && \
-        mkdir -p /opt/nvm && \
-        wget -O- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash && \
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
-        nvm install 16.15.0 && \
-        nvm use 16.15.0 && \
-        nvm alias 16.15.0 && \
-        ln -s "/opt/nvm/versions/node/$(node -v)/bin/node" /usr/bin/node && \
-        ln -s "/opt/nvm/versions/node/$(node -v)/bin/npm"  /usr/bin/npm 
-      tags: node
     
-    # SSL *.ftd.com.br
-    - name: SSL> download ssl *.ftd.com.br
-      get_url:
-        url: https://s3-sa-east-1.amazonaws.com/redes.ftd/ssl/star_ftd_com_br.tar.gz
-        dest: /etc/ssl/star_ftd_com_br.tar.gz
-    - name: SSL> extract ssl certs to /etc/ssl
-      unarchive:
-        src: /etc/ssl/star_ftd_com_br.tar.gz
-        dest: /etc/ssl
-        remote_src: yes
     # Desliga o Selinux
     - name: Disable SELinux
       selinux: state=disabled
