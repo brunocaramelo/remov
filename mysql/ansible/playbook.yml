@@ -1,7 +1,7 @@
 ---
 
 - name: Install MySQL
-  hosts: mysql-service
+  hosts: all
   tasks:
     - name: Install MySQL
       action: $ansible_pkg_mgr pkg=mysql-server state=installed

@@ -1,7 +1,7 @@
 #VERSION: 0.0.3
 
 ---
-- hosts: launched
+- hosts: all
   sudo: yes
 
   vars_files:
