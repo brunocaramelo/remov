@@ -4,9 +4,9 @@
   hosts: all
   tasks:
     - name: Install MySQL
-      action: $ansible_pkg_mgr pkg=mysql-server state=installed
+      action: yum pkg=mysql-server state=installed
     - name: Add Python MySQL DB
-      action: $ansible_pkg_mgr pkg=python-mysqldb state=installed
+      action: yum pkg=python-mysqldb state=installed
 
 
 - name: Configure MySQL
