@@ -8,10 +8,10 @@
 
   tasks:
   - name: update apt
-    apt: update_cache=yes
+    yum: update_cache=yes
 
   - name: ensure packages installed
-    apt: pkg={{ item }} state=latest
+    yum: pkg={{ item }} state=latest
     with_items:
       - make
       - build-essential
