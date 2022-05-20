@@ -1,18 +1,18 @@
 ---
 
-- name: Ensure a list of packages installed
-  yum:
-    name: "{{ packages }}"
-  vars:
-    packages:
-      - mysql-server
-      - python-mysqldb
-    state: present
-    update_cache: yes
-
 - name: Install MySQL
   hosts: all
   tasks:
+    - name: Ensure a list of packages installed
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - mysql-server
+          - python-mysqldb
+        state: present
+        update_cache: yes
+
     - name: Install MySQL
       action: yum pkg=mysql-server state=installed
     - name: Add Python MySQL DB
