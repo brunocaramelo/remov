@@ -16,6 +16,14 @@
       - make
       - build-essential
       - tcl8.5
+  - name: Ensure a list of packages installed
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - build-essential
+        state: present
+        update_cache: yes
 
   - name: download latest stable redis
     get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
