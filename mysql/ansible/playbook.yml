@@ -3,6 +3,9 @@
 - name: Install MySQL
   hosts: all
   tasks:
+    - name: update yum
+      yum: name=* state=latest
+
     - name: Ensure a list of packages installed
       yum:
         name: "{{ packages }}"
