@@ -7,8 +7,8 @@
     - vars.yml
 
   tasks:
-  - name: update apt
-    yum: update_cache=yes
+  - name: update yum
+    yum: name=* state=latest
 
   - name: ensure packages installed
     yum: pkg={{ item }} state=latest
