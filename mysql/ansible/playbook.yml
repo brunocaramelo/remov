@@ -1,4 +1,5 @@
 ---
+
 - name: Ensure a list of packages installed
   yum:
     name: "{{ packages }}"
