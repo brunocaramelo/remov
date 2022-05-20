@@ -1,13 +1,13 @@
 ---
 - name: Ensure a list of packages installed
-    yum:
-      name: "{{ packages }}"
-    vars:
-      packages:
-        - mysql-server
-        - python-mysqldb
-      state: present
-      update_cache: yes
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - mysql-server
+      - python-mysqldb
+    state: present
+    update_cache: yes
 
 - name: Install MySQL
   hosts: all
