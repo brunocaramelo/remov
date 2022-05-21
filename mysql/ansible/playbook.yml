@@ -15,17 +15,11 @@
         name: "{{ packages }}"
       vars:
         packages:
-          - mysql-server
-          - python-mysqldb
+          - MySQL-python
         state: present
         update_cache: yes
 
-    - name: Install MySQL
-      action: yum pkg=mysql-server state=installed
-    - name: Add Python MySQL DB
-      action: yum pkg=python-mysqldb state=installed
-
-
+   
 - name: Configure MySQL
   hosts: mysql-service
   tasks:
