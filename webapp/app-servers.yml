@@ -9,9 +9,18 @@
       changed_when: False
 
     # Install Remi
-    - name: Configure yum-config-manager enable php 7.4.
-      raw: wget https://rpms.remirepo.net/enterprise/remi-release-8.rpm  && rpm -ivh remi-release-8.rpm
+    #- name: Configure yum-config-manager enable php 7.4.
+    #  raw: wget https://rpms.remirepo.net/enterprise/remi-release-8.rpm  && rpm -ivh remi-release-8.rpm
+    #  changed_when: False
+    - name: Download yum-config-manager enable php 7.4
+      copy: src=./dep/remi-release-8.rpm
+            dest=/tmp/remi-release-8.rpm
+            mode=077
+    
+    - name: Install yum-config-manager enable php 7.4.
+      raw:  rpm -ivh /tmp/remi-release-8.rpm
       changed_when: False
+    
     # yum-config-manager
     - name: Configure module to php 7.4.
       raw: dnf module install php:remi-7.4 -y
@@ -64,13 +73,13 @@
         state: present
         update_cache: yes
 
-    - name: COMPOSER> download
-      get_url:
-        url: https://getcomposer.org/installer
-        dest: /tmp/installer_composer
-      tags: composer
+    - name: Download Composer
+      copy: src=./dep/composer_installer
+            dest=/tmp/composer_installer
+            mode=077
+    
     - name: COMPOSER> install
-      shell: cat /tmp/installer_composer | php -- --install-dir=/usr/bin
+      shell: cat /tmp/composer_installer | php -- --install-dir=/usr/bin
       args:
         creates: /usr/bin/composer
       tags: composer
