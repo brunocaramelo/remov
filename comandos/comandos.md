@@ -2,7 +2,7 @@
 
 #### Laravel App
 
-ansible-playbook -i 192.168.238.82, webapp/app-servers.yml -u 4052250 -e "ansible_ssh_pass=Bes05836"
+ansible-playbook -i 192.168.238.82, webapp/app-servers.yml -u 4052250  -kK -vvv
 
 #### WP server
 

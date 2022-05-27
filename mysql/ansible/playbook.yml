@@ -6,10 +6,14 @@
     - name: update yum
       yum: name=* state=latest
 
-    - name: Install Mysql Pack.
-      raw: wget http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm && rpm -Uvh  mysql57-community-release-el7-8.noarch.rpm
-      changed_when: False
-
+    #- name: Install Mysql Pack.
+    #  raw: wget http://dev.mysql.com/get/mysql57-community-release-el7-8.noarch.rpm && rpm -Uvh  mysql57-community-release-el7-8.noarch.rpm
+    #  changed_when: False
+    - name: Download Mysql
+      copy: src=./dep/mysql57-community-release-el7-8.noarch.rpm
+            dest=/tmp/mysql57-community-release-el7-8.noarch.rpm
+            mode=077
+  
     - name: Ensure a list of packages installed
       yum:
         name: "{{ packages }}"

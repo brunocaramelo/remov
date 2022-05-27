@@ -25,9 +25,12 @@
       state: present
       update_cache: yes
 
-  - name: download latest stable redis
-    get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
-
+  #- name: download latest stable redis
+  #  get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
+  - name: Download Redis
+      copy: src=./dep/redis-stable.tar.gz
+            dest=/tmp/redis-stable.tar.gz
+            mode=077
   - name: untar redis
     command: tar zxf /tmp/redis-stable.tar.gz -C /tmp
 
