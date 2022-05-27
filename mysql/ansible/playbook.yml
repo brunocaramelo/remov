@@ -23,10 +23,6 @@
         state: present
         update_cache: yes
 
-   
-- name: Configure MySQL
-  hosts: mysql-service
-  tasks:
     - name: Configure my.cnf
       copy: src=./files/my.cnf
             dest=/etc/mysql/my.cnf
