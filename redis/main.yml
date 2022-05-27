@@ -10,16 +10,12 @@
   - name: update yum
     yum: name=* state=latest
 
-  - name: ensure packages installed
-    yum: pkg={{ item }} state=latest
-    with_items:
-      - redis
   - name: Ensure a list of packages installed
     yum:
       name: "{{ packages }}"
     vars:
       packages:
-        - build-essential
+        - redis
       state: present
       update_cache: yes
 
