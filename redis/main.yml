@@ -9,29 +9,16 @@
   tasks:
   - name: update yum
     yum: name=* state=latest
+    ignore_errors: yes
 
   - name: Ensure a list of packages installed
     yum:
       name: "{{ packages }}"
     vars:
       packages:
-        - perl-PCP-PMDA
         - redis
       state: present
       update_cache: yes
-
-  #- name: download latest stable redis
-  #  get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
-  #- name: Download Redis
-  #  copy: src=./dep/redis-stable.tar.gz
-  #        dest=/tmp/redis-stable.tar.gz
-  #        mode=077
-#
-  #- name: untar redis
-  #  command: tar zxf /tmp/redis-stable.tar.gz -C /tmp
-#
-  #- name: build redis
-  #  command: make -C /tmp/redis-stable
 
   - name: create redis group
     group: name=redis state=present system=yes
@@ -48,9 +35,6 @@
   - name: make sure redis.log file exists
     copy: src=templates/redis.log dest=/var/log/redis.log owner=redis group=redis mode=0644
 
-  - name: copy upstart file
-    copy: src=templates/upstart.conf dest=/etc/init/redis.conf
-
   - name: copy redis.conf file
     copy: src=templates/redis.conf dest=/etc/redis/redis.conf group=redis owner=redis
 
@@ -59,20 +43,6 @@
 
   - name: copy redis-local script
     template: src=templates/redis-local.j2 dest=/usr/local/bin/redis-local mode=0755
-
-  #- name: installing redis binaries
-  #  command: cp /tmp/redis-stable/src/{{ item }} /usr/local/bin
-  #  with_items: 
-  #    - redis-server
-  #    - redis-cli
-  #    - redis-check-aof
-  #    - redis-check-dump
-
-  #- name: cleaning up build files
-  #  command: rm -rf /tmp/{{ item }}
-  #  with_items:
-  #    - redis-stable
-  #    - redis-stable.tar.gz
 
   - name: ensure redis service is restarted
     service: name=redis state=restarted
