@@ -27,7 +27,7 @@
       changed_when: False
 
     # EPEL installing
-    - name: Install Epel Release.
+    - name: update system.
       yum: name=* state=latest
       changed_when: False
 
