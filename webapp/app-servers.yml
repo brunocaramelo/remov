@@ -4,31 +4,8 @@
   gather_facts: no
   tasks:
        # EPEL installing
-    - name: Install Epel Release.
+    - name: update sytem.
       raw: yum -y install epel-release yum-utils
-      changed_when: False
-
-    # Install Remi
-    #- name: Configure yum-config-manager enable php 7.4.
-    #  raw: wget https://rpms.remirepo.net/enterprise/remi-release-8.rpm  && rpm -ivh remi-release-8.rpm
-    #  changed_when: False
-    - name: Download yum-config-manager enable php 7.4
-      copy: src=./dep/remi-release-8.rpm
-            dest=/tmp/remi-release-8.rpm
-            mode=077
-    
-    - name: Install yum-config-manager enable php 7.4.
-      raw:  rpm -ivh /tmp/remi-release-8.rpm
-      changed_when: False
-    
-    # yum-config-manager
-    - name: Configure module to php 7.4.
-      raw: dnf module install php:remi-7.4 -y
-      changed_when: False
-
-    # EPEL installing
-    - name: update system.
-      yum: name=* state=latest
       changed_when: False
 
     - name: Ensure a list of packages installed
