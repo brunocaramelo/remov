@@ -12,7 +12,7 @@
     - name: Download Mysql
       copy: src=./dep/mysql57-community-release-el7-8.noarch.rpm
             dest=/tmp/mysql57-community-release-el7-8.noarch.rpm
-            mode=077
+            mode=0777
   
     - name: Install mysql
       shell: rpm -ivh /tmp/mysql57-community-release-el7-8.noarch.rpm            
