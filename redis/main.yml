@@ -43,7 +43,15 @@
 
   - name: copy redis-local script
     template: src=templates/redis-local.j2 dest=/usr/local/bin/redis-local mode=0755
+  
+  handlers:
+    - name: start redis
+      service: name=redis
+               enabled=yes
+               state=started
+    - name: restart redis
+      service: name=redis
+               enabled=yes
+               state=restarted
 
-  - name: ensure redis service is restarted
-    service: name=redis state=restarted
 
