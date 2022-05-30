@@ -103,3 +103,11 @@
     service: name=httpd
               enabled=yes
               state=restarted
+  - name: start fpm
+    service: name=php-fpm
+              enabled=yes
+              state=started
+  - name: restart php-fpm
+    service: name=php-fpm
+              enabled=yes
+              state=restarted
