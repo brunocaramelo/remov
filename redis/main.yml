@@ -36,7 +36,7 @@
     copy: src=templates/redis.log dest=/var/log/redis.log owner=redis group=redis mode=0644
 
   - name: copy redis.conf file
-    copy: src=templates/redis.conf dest=/etc/redis/redis.conf group=redis owner=redis
+    copy: src=templates/redis.conf dest=/etc/redis.conf group=redis owner=redis
 
   - name: copy custom template
     template: src=templates/redis.local.conf.j2 dest=/etc/redis/redis.local.conf group=redis owner=redis

@@ -4,19 +4,26 @@
   gather_facts: no
   tasks:
        # EPEL installing
-    - name: update sytem.
-      raw: yum -y install epel-release yum-utils
+    - name: Epel isntall.
+      raw: yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      changed_when: False
+      ignore_errors: yes
+       # EPEL installing
+    - name: remi install.
+      raw: yum -y install https://rpms.remirepo.net/enterprise/remi-release-7.rpm
       changed_when: False
       ignore_errors: yes
 
-    - name: Ensure a list of packages installed
-      yum:
-        name: "{{ packages }}"
-      vars:
-        packages:
-          - oracle-php-release-el7
-        state: present
-        update_cache: yes
+    - name: Yum utils install.
+      raw: yum -y install yum-utils
+      changed_when: False
+      ignore_errors: yes
+
+    - name: Select php version.
+      raw: yum-config-manager --enable remi-php74
+      changed_when: False
+      ignore_errors: yes
+
 
     - name: Ensure a list of packages installed
       yum:
@@ -53,6 +60,7 @@
           - php-bz2
           - php-sqlite3
           - php-bcmath
+          - php-redis
           - httpd
           - deltarpm
           - nodejs
