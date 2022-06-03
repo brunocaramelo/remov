@@ -1,86 +1,95 @@
-## Instação de ambiente
+# Instação dos ambientes
 
-### Execução de passos
+## Do que se tratam estas pastas:
 
-#### 1.0 Premissas
+`/webapp` - arquivos de configuração da aplicação frontend (laravel) e backend (wordpress)
+`/redis` - arquivos de configuração do Redis
+`/mysql` - arquivos de configuração do Mysql
+`/comandos` - arquivos de execucação 
 
-1 - Caso use Windows : Ansible instalado Com suporte do WSL
-1 - Instalação nos servidores , pacote sshpass
-
-#### 2.0 Instalação 
-##### Redis
-
-Observação:  alterar redis/vars.yml para definir a senha desejada
-
-1 - Executar no host:
-
-ansible-playbook -i 192.168.238.83,  redis/main.yml -u 4052250 -kK -vvv
-
-##### Mysql
-
-1 - Executar no host:
-
-ansible-playbook -i 192.168.238.84,  mysql/ansible/playbook.yml -u 4052250 -kK -vvv
-
-Pos instalação
- 1 - executar no terminal : mysql_secure_installation
-    1.1 definir parametros de segurança e senha do root
- 2 - acessar como root
-    1.1 - mysql -u root -p
-    1.2 - executar comandos de criação de usuario
-        1.2.1 CREATE USER 'usuarioapp'@'%' IDENTIFIED BY 'senha';
-            GRANT ALL PRIVILEGES ON * . * TO 'usuarioapp'@'%' IDENTIFIED BY 'senha';
-            FLUSH PRIVILEGES;
-
-##### Backend
-
-1 - Executar no host:
-
-ansible-playbook -i 192.168.238.81,  webapp/backend-server.yml -u 4052250 -kK -vvv
+## Instalando
 
 
-Pos instalação
-1 - Baixar aplicação no servidor
-    1.1 cd /var/www/html/
-    1.2 git clone  https://4052250:Bes05836@repositorios.banese.com.br/Banese/arpex-novoportal-backendbanese.git
-2 - Alterar arquivo wp-config.php
-    Alterar arquivos com dados da nova conexao com o banco de dados, como exemplo abaixo
-    
+Caso utilize o Windows, cetifique-se que tenha instalado o WSL e **Ansible**   
+
+### Servidores de aplicação e bancos de dados
+Deve ter o pacote **sshpass**
+
+### Como instalar o Redis
+1. Executar:
+	```
+	ansible-playbook -i 192.168.238.83,  redis/main.yml -u MATRICULA_BANESE -kK -vvv
+	```
+2. Na pasta `redis/vars.yml`, defina a senha desejada
+
+### Como instalar o Mysql
+1. Executar:
+	```
+	ansible-playbook -i 192.168.238.84,  mysql/ansible/playbook.yml -u MATRICULA_BANESE -kK -vvv
+	```
+2. Executar: 
+	```
+	mysql_secure_installation
+	```
+    - Definir parâmetros de segurança e senha do root
+3. Acessar como root
+	```
+	mysql -u root -p
+	```
+	- Executar comandos de criação de usuário:
+	```
+    CREATE USER 'usuarioapp'@'%' IDENTIFIED BY 'senha';
+	GRANT ALL PRIVILEGES ON * . * TO 'usuarioapp'@'%' IDENTIFIED BY 'senha';
+	FLUSH PRIVILEGES;
+	```
+
+### Como instalar o Wordpress
+1. Executar:
+	```
+	ansible-playbook -i 192.168.238.81,  webapp/backend-server.yml -u MATRICULA_BANESE -kK -vvv
+	```
+2. Baixar aplicação do Wordpress
+    - cd `/var/www/html/`
+    - git clone https://MATRICULA_BANESE:SENHA_REDE@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
+3. Alterar o arquivo do wp-config.php
+    - Com os dados da nova conexão com o banco de dados, exemplo:
+    ```
     $connectstr_dbhost = 'hbes803.banese.com.br';
     $connectstr_dbname = 'hbes_wp_content';
     $connectstr_dbusername = 'sandbox';
     $connectstr_dbpassword = 'sandbox';
+	```
 
-3 - Copiar arquivo de configuração web server
-    3.1 - arquivo contido em: webapp/config/backend/000-default.conf
-    3.1 - copiar para /etc/httpd/conf.d/000-default.conf no servidor
+4. Copiar arquivos de configuração
+    - Arquivo contido em `webapp/config/backend/000-default.conf` e `webapp/config/backend/001-storage.conf`
+    - No servidor, copiar para `/etc/httpd/conf.d/000-default.conf` e
+    `/etc/httpd/conf.d/001-storage.conf`
 
-4 - Reiniciar servidor web
-    4.1 - sudo systemctl restart httpd
+5. Reiniciar
+    - Executar:
+	```
+	sudo systemctl restart httpd
+	```
 
+### Como instalar o Laravel
+1. Executar:
+	```
+	ansible-playbook -i 192.168.238.82, webapp/frontend-server.yml -u MATRICULA_BANESE  -kK -vvv
+	```
+2. Baixar aplicação do wordpress
+    - cd `/var/www/html/`
+    - git clone https://MATRICULA_BANESE:SENHA_REDE@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
+3. Enviar arquivo de configuração da aplicação `.env` na raiz do projeto
+    - Arquivo contido em `webapp/config/frontend/.env`
+    - Alterar modelo com os novos dados 
+    - No servidor, copiar para `/var/www/html/arpex-novoportal-internetbanese/.env`
 
-##### Frontend
+4. Copiar arquivo de configuração
+    - Arquivo contido em `webapp/config/frontend/000-default.conf`
+    - No servidor, copiar para `/etc/httpd/conf.d/000-default.conf`
 
-1 - Executar no host:
-
-ansible-playbook -i 192.168.238.82, webapp/frontend-server.yml -u 4052250  -kK -vvv
-
-
-Pos instalação
-1 - Baixar aplicação no servidor
-    1.1 cd /var/www/html/
-    1.2 git clone  https://4052250:Bes05836@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
-2 - Enviar arquivo .env para a raiz do projeto
-    3.1 - arquivo contido em: webapp/config/frontend/.env
-    3.2 - alterar modelo com os novos dados 
-    3.3 - enviar arquivo para : /var/www/html/arpex-novoportal-internetbanese/.env
-    
-
-3 - Copiar arquivo de configuração web server
-    3.1 - arquivo contido em: webapp/config/frontend/000-default.conf
-    3.1 - copiar para /etc/httpd/conf.d/000-default.conf no servidor
-
-4 - Reiniciar servidor web
-    4.1 - sudo systemctl restart httpd
-
-    
+5. Reiniciar
+    - Executar:
+	```
+	sudo systemctl restart httpd
+	```
