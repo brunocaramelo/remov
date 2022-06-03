@@ -50,7 +50,7 @@ Deve ter o pacote **sshpass**
 	```
 2. Baixar aplicação do Wordpress
     - cd `/var/www/html/`
-    - git clone https://MATRICULA_BANESE:SENHA_REDE@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
+    - git clone https://4052250:%23w7e45b22@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
 3. Alterar o arquivo do wp-config.php
     - Com os dados da nova conexão com o banco de dados, exemplo:
     ```
@@ -78,7 +78,7 @@ Deve ter o pacote **sshpass**
 	```
 2. Baixar aplicação do wordpress
     - cd `/var/www/html/`
-    - git clone https://MATRICULA_BANESE:SENHA_REDE@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
+    - git clone https://4052250:%23w7e45b22@repositorios.banese.com.br/Banese/arpex-novoportal-internetbanese.git
 3. Enviar arquivo de configuração da aplicação `.env` na raiz do projeto
     - Arquivo contido em `webapp/config/frontend/.env`
     - Alterar modelo com os novos dados 
